@@ -147,20 +147,17 @@ class _WelcomePageState extends State<WelcomePage> {
 
     _formKey.currentState.save();
 
-    Navigator.push(
+    
+
+    final res=HttpService().authenticateUser(_email, _password);
+
+    if(res != null){
+      //Also have to get the data of the relevant driver by a get function
+      Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => CustomAppBar()),
         );
-
-    // final res=HttpService().authenticateUser(_email, _password);
-
-    // if(res != null){
-    //   //Also have to get the data of the relevant driver by a get function
-    //   Navigator.push(
-    //       context,
-    //       MaterialPageRoute(builder: (context) => DashBoard()),
-    //     );
-    // }
+    }
 
       } else {
     //    If all data are not valid then start auto validation.
