@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sync_mobile_app/custom_app_bar.dart';
 import 'package:sync_mobile_app/models/user_model.dart';
 import 'package:sync_mobile_app/http_service.dart';
 import 'package:sync_mobile_app/screens/dashboard.dart';
@@ -148,7 +149,7 @@ class _WelcomePageState extends State<WelcomePage> {
 
     Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => DashBoard()),
+          MaterialPageRoute(builder: (context) => CustomAppBar()),
         );
 
     // final res=HttpService().authenticateUser(_email, _password);
