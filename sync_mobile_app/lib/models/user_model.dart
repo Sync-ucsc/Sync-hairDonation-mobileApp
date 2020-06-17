@@ -23,3 +23,28 @@ class UserModel {
         "password": password,
     };
 }
+
+ResponseModel responseModelFromJson(String str) => ResponseModel.fromJson(json.decode(str));
+class ResponseModel {
+    ResponseModel({
+        this.data,
+        this.msg,
+        this.success
+    });
+
+    dynamic data;
+    String msg;
+    bool success;
+
+    factory ResponseModel.fromJson(Map<String, dynamic> json) => ResponseModel(
+        data: json["data"],
+        msg: json["msg"],
+        success: json["success"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "data": data,
+        "msg": msg,
+        "success": success
+    };
+}

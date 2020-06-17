@@ -149,9 +149,9 @@ class _WelcomePageState extends State<WelcomePage> {
 
     
 
-    final res=HttpService().authenticateUser(_email, _password);
-
-    if(res != null){
+    final res=await HttpService().authenticateUser(_email, _password);
+    print(res.data);
+    if(res.data != ''){
       //Also have to get the data of the relevant driver by a get function
       Navigator.push(
           context,
