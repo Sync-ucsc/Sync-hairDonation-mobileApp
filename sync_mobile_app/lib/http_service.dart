@@ -12,7 +12,7 @@ import 'package:http/http.dart' as http;
       final json = jsonEncode({"email":email,"password": password});
 
      final response= await http.post(apiUrl, headers: headers, body: json);
-      print(response.body);
+     
       // if(response.statusCode==201){
         
       //   final String responseString=response.body;
@@ -21,6 +21,7 @@ import 'package:http/http.dart' as http;
       // }else{
       //   return null;
       // }
+      print(response.body);
       return responseModelFromJson(response.body);
     }
   }
