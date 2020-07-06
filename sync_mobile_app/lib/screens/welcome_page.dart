@@ -7,6 +7,11 @@ import 'dart:convert';
 import 'package:convert/convert.dart';
 import 'package:crypto/crypto.dart' as crypto;
 
+class UserDetails {
+  static String userToken;
+  static String currentUserEmail;
+}
+
 class WelcomePage extends StatefulWidget {
   WelcomePage({Key key}) : super(key: key);
   @override
@@ -99,7 +104,7 @@ class _WelcomePageState extends State<WelcomePage> {
                                       fillColor: Colors.purple,
                                     ),
                                     validator: (String arg) {
-                                      if (arg.length < 8)
+                                      if (arg.length < 6)
                                         return 'Password invalid';
                                       else
                                         return null;
@@ -144,16 +149,98 @@ class _WelcomePageState extends State<WelcomePage> {
   Future<void> _submit() async {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-
-      this._newPassword = generateMd5(_password);
+      if (_password.length == 6) {
+        this._newPassword = _password;
+      } else {
+        this._newPassword = generateMd5(_password);
+      }
 
       final res = await HttpService().authenticateUser(_email, _newPassword);
-      print(res.data);
-      if (res.data != '') {
+
+      print(res.msg);
+      if (res.msg == 'password change') {
+        UserDetails.currentUserEmail = _email;
+        String x = res.data['userToken'];
+        List<String> y = x.split("JWT");
+        String token = y[1];
+        UserDetails.userToken = token;
+        print(token);
+        return showDialog<void>(
+          context: context,
+          barrierDismissible: false, // user must tap button!
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(
+                'Welcome To Sync',
+                style: TextStyle(color: Colors.purple),
+              ),
+              content: SingleChildScrollView(
+                child: ListBody(
+                  children: <Widget>[
+                    Text(
+                        'Because you are new to our system. You will have to change your password'),
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text(
+                    'Change my password',
+                    style: TextStyle(
+                      color: Colors.purple,
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => CustomAppBar()),
+                    );
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      }
+      if (res.msg == 'sign in') {
+        UserDetails.currentUserEmail = _email;
         //Also have to get the data of the relevant driver by a get function
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => CustomAppBar()),
+        );
+      } else {
+        return showDialog<void>(
+          context: context,
+          barrierDismissible: false, // user must tap button!
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(
+                'Error',
+                style: TextStyle(color: Colors.purple),
+              ),
+              content: SingleChildScrollView(
+                child: ListBody(
+                  children: <Widget>[
+                    Text(res.msg),
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text(
+                    'Ok',
+                    style: TextStyle(
+                      color: Colors.purple,
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            );
+          },
         );
       }
     } else {

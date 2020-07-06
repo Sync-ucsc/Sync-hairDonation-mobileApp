@@ -53,7 +53,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                         Icon(
                           Icons.settings,
                           color: Colors.white,
-                        )
+                        )r
                       ]),
                     ),
                   ])),
