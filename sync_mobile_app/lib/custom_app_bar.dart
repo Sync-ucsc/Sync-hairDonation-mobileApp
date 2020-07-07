@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sync_mobile_app/screens/dashboard.dart';
 import 'package:sync_mobile_app/screens/routes_view.dart';
 import 'package:sync_mobile_app/screens/target_page.dart';
+import 'package:sync_mobile_app/screens/welcome_page.dart';
 
 class CustomAppBar extends StatefulWidget {
   @override
@@ -34,26 +35,37 @@ class _CustomAppBarState extends State<CustomAppBar> {
                           backgroundImage: AssetImage("images/Himash.jpg"),
                         ),
                         SizedBox(width: _width * 0.04),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text("Sachindu Himash Peiris",
-                                style: TextStyle(
-                                    fontSize: _height * 0.03,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold)),
-                            Text("himash1997@gmail.com",
-                                style: TextStyle(
-                                    fontSize: _height * 0.02,
-                                    color: Colors.white,
-                                    fontStyle: FontStyle.italic))
-                          ],
+                        Container(
+                          width: _width * 0.5,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                  UserDetails.firstName +
+                                      " " +
+                                      UserDetails.lastName,
+                                  style: TextStyle(
+                                      fontSize: _height * 0.03,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold)),
+                              Text(UserDetails.currentUserEmail,
+                                  style: TextStyle(
+                                      fontSize: _height * 0.02,
+                                      color: Colors.white,
+                                      fontStyle: FontStyle.italic))
+                            ],
+                          ),
                         ),
-                        SizedBox(width: _width * 0.05),
                         Icon(
                           Icons.settings,
                           color: Colors.white,
-                        )r
+                        ),
+                        SizedBox(width: _width * 0.04),
+                        IconButton(
+                          icon: Icon(Icons.power_settings_new),
+                          color: Colors.white,
+                          onPressed: _logout,
+                        )
                       ]),
                     ),
                   ])),
@@ -69,6 +81,18 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 physics: NeverScrollableScrollPhysics(),
                 children: [DashBoard(), RoutesView(), TargetPage()]),
           )),
+    );
+  }
+
+  _logout() {
+    UserDetails.currentUserEmail = null;
+    UserDetails.firstName = null;
+    UserDetails.lastName = null;
+    UserDetails.userToken = null;
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => WelcomePage()),
     );
   }
 }

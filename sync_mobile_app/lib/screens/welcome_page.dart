@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sync_mobile_app/custom_app_bar.dart';
 import 'package:sync_mobile_app/models/user_model.dart';
 import 'package:sync_mobile_app/http_service.dart';
+import 'package:sync_mobile_app/screens/change_password.dart';
 import 'package:sync_mobile_app/screens/dashboard.dart';
 import 'dart:convert';
 import 'package:convert/convert.dart';
@@ -10,6 +11,8 @@ import 'package:crypto/crypto.dart' as crypto;
 class UserDetails {
   static String userToken;
   static String currentUserEmail;
+  static String firstName;
+  static String lastName;
 }
 
 class WelcomePage extends StatefulWidget {
@@ -160,6 +163,7 @@ class _WelcomePageState extends State<WelcomePage> {
       print(res.msg);
       if (res.msg == 'password change') {
         UserDetails.currentUserEmail = _email;
+
         String x = res.data['userToken'];
         List<String> y = x.split("JWT");
         String token = y[1];
@@ -193,7 +197,7 @@ class _WelcomePageState extends State<WelcomePage> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => CustomAppBar()),
+                      MaterialPageRoute(builder: (context) => ChangePassword()),
                     );
                   },
                 ),
@@ -203,6 +207,8 @@ class _WelcomePageState extends State<WelcomePage> {
         );
       }
       if (res.msg == 'sign in') {
+        UserDetails.firstName = res.data["user"]["firstName"];
+        UserDetails.lastName = res.data["user"]["lastName"];
         UserDetails.currentUserEmail = _email;
         //Also have to get the data of the relevant driver by a get function
         Navigator.push(
