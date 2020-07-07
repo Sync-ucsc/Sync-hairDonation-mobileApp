@@ -46,9 +46,9 @@ class HttpService {
     final String apiUrl = "http://10.0.2.2:3000/user/changePassword";
     Map<String, String> headers = {
       "Content-type": "application/json",
-      'authorization': token
+      'authorization': 'Bearer ' + token
     };
     final response = await http.post(apiUrl, body: data, headers: headers);
-    print(response.body);
+    print(".........." + response.body);
   }
 }
