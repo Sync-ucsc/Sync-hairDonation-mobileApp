@@ -37,4 +37,18 @@ class HttpService {
     final json = await http.get(apiUrl);
     return TargetModel.fromJson(jsonDecode(json.body));
   }
+
+  Future<ResponseModel> changePassword(
+      String email, String password, String token) async {
+    print(email);
+    print(password);
+    final data = jsonEncode({"email": email, "password": password});
+    final String apiUrl = "http://10.0.2.2:3000/user/changePassword";
+    Map<String, String> headers = {
+      "Content-type": "application/json",
+      'authorization': token
+    };
+    final response = await http.post(apiUrl, body: data, headers: headers);
+    print(response.body);
+  }
 }

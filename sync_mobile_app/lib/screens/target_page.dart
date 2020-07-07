@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:sync_mobile_app/http_service.dart';
 import 'package:sync_mobile_app/models/target_model.dart';
+import 'package:sync_mobile_app/screens/dashboard.dart';
 import 'package:sync_mobile_app/screens/welcome_page.dart';
+
+bool isFirstBuild = true;
+
+class IsEnabled {
+  static List<bool> isEnabled = [];
+}
 
 class TargetPage extends StatefulWidget {
   @override
@@ -10,18 +17,37 @@ class TargetPage extends StatefulWidget {
 
 class _TargetPageState extends State<TargetPage> {
   List<Target> salons = [];
+
   @override
   void initState() {
-    _getSalon();
+    setState(() {
+      _getSalon();
+    });
     super.initState();
   }
 
   Future<void> _getSalon() async {
     final res = await HttpService().getTarget();
     for (var i = 0; i < res.data[0].targets.length; i++) {
-      salons.add(res.data[0].targets[i]);
+      setState(() {
+        salons.add(res.data[0].targets[i]);
+      });
     }
     print(salons);
+    if (isFirstBuild) {
+      _getTarget();
+    }
+  }
+
+  Future<void> _getTarget() async {
+    setState(() {
+      isFirstBuild = false;
+    });
+
+    for (var i = 0; i < salons.length; i++) {
+      UserTarget.target += salons[i].noOfWigs;
+      IsEnabled.isEnabled.add(true);
+    }
   }
 
   @override
@@ -81,7 +107,9 @@ class _TargetPageState extends State<TargetPage> {
                           "Complete",
                           style: TextStyle(color: Colors.white),
                         ),
-                        onPressed: () => _complete(index),
+                        onPressed: IsEnabled.isEnabled[index]
+                            ? () => _complete(index)
+                            : null,
                       )
                     ],
                   ),
@@ -103,7 +131,7 @@ class _TargetPageState extends State<TargetPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-            'Are you Sure',
+            'Are you Sure?',
             style: TextStyle(color: Colors.purple),
           ),
           content: SingleChildScrollView(
@@ -122,7 +150,51 @@ class _TargetPageState extends State<TargetPage> {
                   color: Colors.purple,
                 ),
               ),
-              onPressed: () {},
+              onPressed: () => _completeTarget(index, noOfWigs, context),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  _completeTarget(int index, int noOfwigs, BuildContext context) async {
+    setState(() {
+      IsEnabled.isEnabled[index] = false;
+    });
+    UserTarget.completed += noOfwigs;
+    Navigator.pop(context);
+    if (UserTarget.completed == UserTarget.target) {
+      _showCompletionDialog();
+    }
+  }
+
+  _showCompletionDialog() {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'Congratulations!',
+            style: TextStyle(color: Colors.purple),
+          ),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('You completed your target'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text(
+                "Ok, Go back",
+                style: TextStyle(
+                  color: Colors.purple,
+                ),
+              ),
+              onPressed: () => Navigator.pop(context),
             ),
           ],
         );
