@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "258021634883",
+    "firebase_url": "https://sync-hairdonation.firebaseio.com",
+    "project_id": "sync-hairdonation",
+    "storage_bucket": "sync-hairdonation.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:258021634883:android:b851fa228308964d6df5f6",
+        "android_client_info": {
+          "package_name": "com.example.sync_mobile_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "258021634883-m2ljakuved28v1qqnn8fv6n8lrrorck8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQpm26fxdRqmkfxNJ2ZVOlxLl3JHGKtV0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "258021634883-m2ljakuved28v1qqnn8fv6n8lrrorck8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

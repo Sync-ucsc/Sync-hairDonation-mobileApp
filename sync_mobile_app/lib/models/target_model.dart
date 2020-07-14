@@ -33,6 +33,7 @@ class Datum {
   Datum({
     this.createdAt,
     this.status,
+    this.notification,
     this.id,
     this.driverId,
     this.driverEmail,
@@ -41,6 +42,7 @@ class Datum {
 
   DateTime createdAt;
   String status;
+  String notification;
   String id;
   String driverId;
   String driverEmail;
@@ -49,6 +51,7 @@ class Datum {
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
         createdAt: DateTime.parse(json["createdAt"]),
         status: json["status"],
+        notification: json["notification"],
         id: json["_id"],
         driverId: json["driverId"],
         driverEmail: json["driverEmail"],
@@ -59,6 +62,7 @@ class Datum {
   Map<String, dynamic> toJson() => {
         "createdAt": createdAt.toIso8601String(),
         "status": status,
+        "notification": notification,
         "_id": id,
         "driverId": driverId,
         "driverEmail": driverEmail,
@@ -69,6 +73,7 @@ class Datum {
 class Target {
   Target({
     this.status,
+    this.notification,
     this.salonId,
     this.salonName,
     this.requestId,
@@ -78,6 +83,7 @@ class Target {
   });
 
   String status;
+  String notification;
   String salonId;
   String salonName;
   String requestId;
@@ -87,6 +93,7 @@ class Target {
 
   factory Target.fromJson(Map<String, dynamic> json) => Target(
         status: json["status"],
+        notification: json["notification"],
         salonId: json["salonId"],
         salonName: json["salonName"],
         requestId: json["requestId"],
@@ -97,6 +104,7 @@ class Target {
 
   Map<String, dynamic> toJson() => {
         "status": status,
+        "notification": notification,
         "salonId": salonId,
         "salonName": salonName,
         "requestId": requestId,
