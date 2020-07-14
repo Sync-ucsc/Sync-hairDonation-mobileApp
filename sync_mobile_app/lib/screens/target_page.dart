@@ -46,7 +46,11 @@ class _TargetPageState extends State<TargetPage> {
 
     for (var i = 0; i < salons.length; i++) {
       UserTarget.target += salons[i].noOfWigs;
-      IsEnabled.isEnabled.add(true);
+      if (salons[i].status == "NeedToDeliver") {
+        IsEnabled.isEnabled.add(true);
+      } else if (salons[i].status == "Delivered") {
+        IsEnabled.isEnabled.add(false);
+      }
     }
   }
 

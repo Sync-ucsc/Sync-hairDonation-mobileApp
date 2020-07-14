@@ -152,7 +152,7 @@ class _WelcomePageState extends State<WelcomePage> {
   Future<void> _submit() async {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      if (_password.length == 6) {
+      if (_password.length < 8) {
         this._newPassword = _password;
       } else {
         this._newPassword = generateMd5(_password);

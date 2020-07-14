@@ -5,12 +5,12 @@ import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
 import 'package:flutter_rounded_progress_bar/rounded_progress_bar_style.dart';
 import 'package:sync_mobile_app/screens/flutter_rounded_progress_bar.dart';
 
-bool isFirstBuild = true;
-
 class UserTarget {
   static int target = 0;
   static int completed = 0;
 }
+
+bool isFirstBuild = true;
 
 class DashBoard extends StatefulWidget {
   @override
@@ -19,6 +19,7 @@ class DashBoard extends StatefulWidget {
 
 class _DashBoardState extends State<DashBoard> {
   double percent;
+
   @override
   void initState() {
     setState(() {

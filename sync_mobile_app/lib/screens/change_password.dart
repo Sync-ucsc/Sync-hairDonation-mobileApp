@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:sync_mobile_app/http_service.dart';
 import 'package:sync_mobile_app/screens/welcome_page.dart';
+import 'dart:convert';
+import 'package:convert/convert.dart';
+import 'package:crypto/crypto.dart' as crypto;
 
 class passwordChange {
   static String _password;
@@ -19,6 +22,7 @@ class _ChangePasswordState extends State<ChangePassword> {
   bool _autoValidate = false;
   String _password;
   String _confirmPassword;
+  String _newPassword;
   @override
   Widget build(BuildContext context) {
     final _height = MediaQuery.of(context).size.height;
@@ -176,15 +180,27 @@ class _ChangePasswordState extends State<ChangePassword> {
     ));
   }
 
+  generateMd5(String data) {
+    var content = new Utf8Encoder().convert(data);
+    var md5 = crypto.md5;
+    var digest = md5.convert(content);
+    return hex.encode(digest.bytes);
+  }
+
   Future<void> _submit() async {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      passwordChange._password = _password;
+      this._newPassword = generateMd5(_password);
+      passwordChange._password = this._newPassword;
       final res = await HttpService().changePassword(
           UserDetails.currentUserEmail,
           passwordChange._password,
           UserDetails.userToken);
-      print(res.data);
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => WelcomePage()),
+      );
     } else {
       setState(() {
         _autoValidate = true;
