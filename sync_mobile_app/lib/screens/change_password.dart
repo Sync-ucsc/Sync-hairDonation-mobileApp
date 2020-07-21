@@ -132,7 +132,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                                   keyboardType: TextInputType.text,
                                   controller: _confirmPass,
                                   decoration: InputDecoration(
-                                    labelText: 'Confirm Password',
+                                    labelText: 'Confirm New Password',
                                     fillColor: Colors.purple,
                                   ),
                                   validator: (String arg) {
