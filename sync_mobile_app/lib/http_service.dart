@@ -50,5 +50,20 @@ class HttpService {
     };
     final response = await http.post(apiUrl, body: data, headers: headers);
     print(".........." + response.body);
+    return responseModelFromJson(response.body);
+  }
+
+  Future<ResponseModel> changeProfilePassword(
+      String email, String password, String oldPassword, String token) async {
+    final data = jsonEncode(
+        {"email": email, "password": password, "oldPassword": oldPassword});
+    final String apiUrl = "http://10.0.2.2:3000/user/profileChanePassword";
+    Map<String, String> headers = {
+      "Content-type": "application/json",
+      'authorization': 'Bearer ' + token
+    };
+    final response = await http.post(apiUrl, body: data, headers: headers);
+    print(".........." + response.body);
+    return responseModelFromJson(response.body);
   }
 }

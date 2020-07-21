@@ -129,6 +129,7 @@ class _TargetPageState extends State<TargetPage> {
 
   _complete(int index) {
     final noOfWigs = salons[index].noOfWigs;
+
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
