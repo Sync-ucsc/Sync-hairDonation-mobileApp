@@ -29,8 +29,8 @@ class HttpService {
   }
 
   Future<TargetModel> getTarget() async {
-    final String apiUrl =
-        "http://10.0.2.2:3000/targets/getTarget/aka@gmail.com";
+    final String apiUrl = "http://10.0.2.2:3000/targets/getTarget/" +
+        UserDetails.currentUserEmail;
     Map<String, String> headers = {
       "Content-type": "application/json",
       'authorization': 'Basic c3R1ZHlkb3RlOnN0dWR5ZG90ZTEyMw=='
@@ -74,5 +74,15 @@ class HttpService {
 
     print(".........." + response.body);
     return responseModelFromJson(response.body);
+  }
+
+  Future<ResponseModel> sendDriverID(email) async {
+    final String apiUrl =
+        "http://10.0.2.2:3000/shortestPath/sendDriverID/" + email;
+    Map<String, String> headers = {
+      "Content-type": "application/json",
+    };
+    final json = await http.get(apiUrl);
+    return ResponseModel.fromJson(jsonDecode(json.body));
   }
 }

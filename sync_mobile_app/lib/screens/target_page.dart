@@ -36,6 +36,8 @@ class _TargetPageState extends State<TargetPage> {
     print(salons);
     if (isFirstBuild) {
       _getTarget();
+      final email = UserDetails.currentUserEmail;
+      var res = await HttpService().sendDriverID(email);
     }
   }
 
