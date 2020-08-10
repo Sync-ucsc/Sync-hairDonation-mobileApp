@@ -210,6 +210,11 @@ class _WelcomePageState extends State<WelcomePage> {
         UserDetails.firstName = res.data["user"]["firstName"];
         UserDetails.lastName = res.data["user"]["lastName"];
         UserDetails.currentUserEmail = _email;
+        String x = res.data['userToken'];
+        List<String> y = x.split("JWT");
+        String token = y[1];
+        UserDetails.userToken = token;
+        print(token);
         //Also have to get the data of the relevant driver by a get function
         Navigator.push(
           context,

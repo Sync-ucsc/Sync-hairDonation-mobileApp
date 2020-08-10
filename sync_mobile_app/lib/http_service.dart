@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'models/user_model.dart';
 import 'models/target_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:sync_mobile_app/screens/welcome_page.dart';
 
 class HttpService {
   Future<ResponseModel> authenticateUser(String email, String password) async {
@@ -28,8 +29,8 @@ class HttpService {
   }
 
   Future<TargetModel> getTarget() async {
-    final String apiUrl =
-        "http://10.0.2.2:3000/targets/getTarget/aka@gmail.com";
+    final String apiUrl = "http://10.0.2.2:3000/targets/getTarget/" +
+        UserDetails.currentUserEmail;
     Map<String, String> headers = {
       "Content-type": "application/json",
       'authorization': 'Basic c3R1ZHlkb3RlOnN0dWR5ZG90ZTEyMw=='
@@ -57,13 +58,31 @@ class HttpService {
       String email, String password, String oldPassword, String token) async {
     final data = jsonEncode(
         {"email": email, "password": password, "oldPassword": oldPassword});
+    print(UserDetails.userToken);
     final String apiUrl = "http://10.0.2.2:3000/user/profileChanePassword";
     Map<String, String> headers = {
       "Content-type": "application/json",
       'authorization': 'Bearer ' + token
     };
-    final response = await http.post(apiUrl, body: data, headers: headers);
+    var response;
+    print("gggg");
+    try {
+      response = await http.post(apiUrl, body: data, headers: headers);
+    } catch (e) {
+      print(e);
+    }
+
     print(".........." + response.body);
     return responseModelFromJson(response.body);
+  }
+
+  Future<ResponseModel> sendDriverID(email) async {
+    final String apiUrl =
+        "http://10.0.2.2:3000/shortestPath/sendDriverID/" + email;
+    Map<String, String> headers = {
+      "Content-type": "application/json",
+    };
+    final json = await http.get(apiUrl);
+    return ResponseModel.fromJson(jsonDecode(json.body));
   }
 }

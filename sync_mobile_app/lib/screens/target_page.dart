@@ -36,6 +36,8 @@ class _TargetPageState extends State<TargetPage> {
     print(salons);
     if (isFirstBuild) {
       _getTarget();
+      final email = UserDetails.currentUserEmail;
+      var res = await HttpService().sendDriverID(email);
     }
   }
 
@@ -132,7 +134,7 @@ class _TargetPageState extends State<TargetPage> {
 
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // user must tap button!
+      barrierDismissible: true, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
