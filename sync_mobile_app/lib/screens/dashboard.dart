@@ -211,17 +211,34 @@ class _DashBoardState extends State<DashBoard> {
             child: Container(
                 height: _height * 0.28,
                 width: _width * 0.95,
-                padding: EdgeInsets.all(12),
+                padding: EdgeInsets.all(20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(
-                      "Income Analysis",
-                      style: TextStyle(
-                          fontSize: 23,
-                          color: Color(0xFF9F0784),
-                          fontWeight: FontWeight.w500),
+                    Padding(
+                      padding: EdgeInsets.only(left: _height * 0.01),
+                      child: Text(
+                        "Income Analysis",
+                        style: TextStyle(
+                            fontSize: 23,
+                            color: Color(0xFF9F0784),
+                            fontWeight: FontWeight.w500),
+                      ),
                     ),
+                    SizedBox(height: 5),
+                    Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(_height * 0.02),
+                        side: BorderSide(
+                            color: Color(0xFF9F0784), width: _width * 0.001),
+                      ),
+                      color: Colors.white,
+                      child: Container(
+                        height: _height * 0.05,
+                        width: _width * 0.8,
+                        child: Text("This Month Income : "),
+                      ),
+                    )
                   ],
                 )),
           )
