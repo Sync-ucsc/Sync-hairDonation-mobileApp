@@ -6,6 +6,12 @@ import 'package:sync_mobile_app/screens/welcome_page.dart';
 
 bool isFirstBuild = true;
 
+class UserTarget {
+  static int target = 0;
+  static int completed = 0;
+  static List<Target> salons = [];
+}
+
 class IsEnabled {
   static List<bool> isEnabled = [];
 }
@@ -47,6 +53,8 @@ class _TargetPageState extends State<TargetPage> {
     });
 
     for (var i = 0; i < salons.length; i++) {
+      UserTarget.salons.add(salons[i]);
+
       UserTarget.target += salons[i].noOfWigs;
       if (salons[i].status == "NeedToDeliver") {
         IsEnabled.isEnabled.add(true);
@@ -54,6 +62,7 @@ class _TargetPageState extends State<TargetPage> {
         IsEnabled.isEnabled.add(false);
       }
     }
+    print(UserTarget.salons[1].lat.toString());
   }
 
   @override
