@@ -35,6 +35,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
     return Container(
       child: DefaultTabController(
           length: 3,
+          initialIndex: 2,
           child: new Scaffold(
             appBar: PreferredSize(
               preferredSize: Size.fromHeight(_height * 0.2),

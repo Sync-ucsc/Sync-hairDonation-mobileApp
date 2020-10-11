@@ -3,12 +3,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
 import 'package:flutter_rounded_progress_bar/rounded_progress_bar_style.dart';
+import 'package:sync_mobile_app/screens/target_page.dart';
 import 'package:sync_mobile_app/screens/flutter_rounded_progress_bar.dart';
-
-class UserTarget {
-  static int target = 0;
-  static int completed = 0;
-}
 
 bool isFirstBuild = true;
 
@@ -29,15 +25,9 @@ class _DashBoardState extends State<DashBoard> {
   }
 
   Future<void> _percentCal() async {
-    if (isFirstBuild) {
-      percent = 0;
-      isFirstBuild = false;
-      print("hi");
-    } else {
-      setState(() {
-        percent = (UserTarget.completed / UserTarget.target) * 100;
-      });
-    }
+    setState(() {
+      percent = (UserTarget.completed / UserTarget.target) * 100;
+    });
   }
 
   @override
