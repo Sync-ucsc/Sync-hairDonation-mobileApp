@@ -85,4 +85,18 @@ class HttpService {
     final json = await http.get(apiUrl);
     return ResponseModel.fromJson(jsonDecode(json.body));
   }
+
+  Future<ResponseModel> changeSalonStatus(
+      String requestId, String status) async {
+    final String apiUrl = "http://10.0.2.2:3000/targets/changeSalonStatus";
+    Map<String, String> headers = {
+      "Content-type": "application/json",
+    };
+    final json = jsonEncode({"requestId": requestId, "status": status});
+
+    final response = await http.post(apiUrl, body: json, headers: headers);
+
+    print(response.body);
+    return responseModelFromJson(response.body);
+  }
 }
