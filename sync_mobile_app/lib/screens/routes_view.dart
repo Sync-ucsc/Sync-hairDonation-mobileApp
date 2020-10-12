@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -10,6 +11,8 @@ import 'package:sync_mobile_app/screens/target_page.dart';
 import 'dart:ui' as ui;
 import 'dart:math' show cos, sqrt, asin;
 
+import 'package:sync_mobile_app/screens/welcome_page.dart';
+
 class Markers {
   static List<Marker> _markers = [];
 }
@@ -20,6 +23,7 @@ class RoutesView extends StatefulWidget {
 }
 
 class _RoutesViewState extends State<RoutesView> {
+  Position currentLocation;
   Position position;
   LatLng _center;
   PolylinePoints polylinePoints;
@@ -30,7 +34,20 @@ class _RoutesViewState extends State<RoutesView> {
   String salonName;
   @override
   void initState() {
+    Timer.periodic(Duration(minutes: 2), (timer) {
+      _locateMe();
+    });
     super.initState();
+  }
+
+  _locateMe() async {
+    currentLocation = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    setState(() {
+      currentLocation = currentLocation;
+    });
+    HttpService().changeLocation(currentLocation.latitude,
+        currentLocation.longitude, UserDetails.currentUserEmail);
   }
 
   _RoutesViewState() {

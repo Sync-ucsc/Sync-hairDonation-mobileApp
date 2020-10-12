@@ -99,4 +99,18 @@ class HttpService {
     print(response.body);
     return responseModelFromJson(response.body);
   }
+
+  Future<ResponseModel> changeLocation(
+      double lat, double lng, String email) async {
+    final String apiUrl = "http://10.0.2.2:3000/driver/changeLocation";
+    Map<String, String> headers = {
+      "Content-type": "application/json",
+    };
+    final json = jsonEncode({"lat": lat, "lon": lng, "email": email});
+
+    final response = await http.post(apiUrl, body: json, headers: headers);
+
+    print(response.body);
+    return responseModelFromJson(response.body);
+  }
 }

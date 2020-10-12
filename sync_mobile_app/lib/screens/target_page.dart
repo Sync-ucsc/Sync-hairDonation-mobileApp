@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:sync_mobile_app/http_service.dart';
 import 'package:sync_mobile_app/models/target_model.dart';
 import 'package:sync_mobile_app/screens/dashboard.dart';
@@ -24,13 +27,26 @@ class TargetPage extends StatefulWidget {
 
 class _TargetPageState extends State<TargetPage> {
   List<Target> salons = [];
-
+  Position currentLocation;
   @override
   void initState() {
+    Timer.periodic(Duration(minutes: 2), (timer) {
+      _locateMe();
+    });
     setState(() {
       _getSalon();
     });
     super.initState();
+  }
+
+  _locateMe() async {
+    currentLocation = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    setState(() {
+      currentLocation = currentLocation;
+    });
+    HttpService().changeLocation(currentLocation.latitude,
+        currentLocation.longitude, UserDetails.currentUserEmail);
   }
 
   Future<void> _getSalon() async {
