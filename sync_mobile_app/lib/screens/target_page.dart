@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:sync_mobile_app/http_service.dart';
 import 'package:sync_mobile_app/models/target_model.dart';
 import 'package:sync_mobile_app/screens/dashboard.dart';
+import 'package:sync_mobile_app/screens/routes_view.dart';
 import 'package:sync_mobile_app/screens/welcome_page.dart';
 
 bool isFirstBuild = true;
@@ -23,13 +27,26 @@ class TargetPage extends StatefulWidget {
 
 class _TargetPageState extends State<TargetPage> {
   List<Target> salons = [];
-
+  Position currentLocation;
   @override
   void initState() {
+    Timer.periodic(Duration(minutes: 2), (timer) {
+      _locateMe();
+    });
     setState(() {
       _getSalon();
     });
     super.initState();
+  }
+
+  _locateMe() async {
+    currentLocation = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    setState(() {
+      currentLocation = currentLocation;
+    });
+    HttpService().changeLocation(currentLocation.latitude,
+        currentLocation.longitude, UserDetails.currentUserEmail);
   }
 
   Future<void> _getSalon() async {
@@ -53,16 +70,15 @@ class _TargetPageState extends State<TargetPage> {
     });
 
     for (var i = 0; i < salons.length; i++) {
-      UserTarget.salons.add(salons[i]);
-
       UserTarget.target += salons[i].noOfWigs;
       if (salons[i].status == "NeedToDeliver") {
+        //The salons that have to be tracked
+
         IsEnabled.isEnabled.add(true);
       } else if (salons[i].status == "Delivered") {
         IsEnabled.isEnabled.add(false);
       }
     }
-    print(UserTarget.salons[1].lat.toString());
   }
 
   @override
@@ -180,6 +196,12 @@ class _TargetPageState extends State<TargetPage> {
     });
     UserTarget.completed += noOfwigs;
     Navigator.pop(context);
+    HttpService().changeSalonStatus(salons[index].requestId, "Delivered");
+    setState(() {
+      UserTarget.salons = [];
+      // Markers._markers = [];
+    });
+
     if (UserTarget.completed == UserTarget.target) {
       _showCompletionDialog();
     }
