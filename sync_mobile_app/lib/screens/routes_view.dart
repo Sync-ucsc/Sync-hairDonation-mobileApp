@@ -57,13 +57,19 @@ class _RoutesViewState extends State<RoutesView> {
 
   _getTarget() async {
     final res = await HttpService().getTarget();
-    for (var i = 0; i < res.data[0].targets.length; i++) {
-      if (res.data[0].targets[i].status == "NeedToDeliver") {
-        setState(() {
-          UserTarget.salons.add(res.data[0].targets[i]);
-        });
-      }
-    }
+    UserTarget.salons = res.data[0].targets
+        .where((target) => target.status == "NeedToDeliver")
+        .toList();
+
+    Markers._markers = [];
+
+    // for (var i = 0; i < res.data[0].targets.length; i++) {
+    //   if (res.data[0].targets[i].status == "NeedToDeliver") {
+    //     setState(() {
+    //       UserTarget.salons.add(res.data[0].targets[i]);
+    //     });
+    //   }
+    // }
   }
 
   _getCurrentLocation() async {
@@ -78,7 +84,6 @@ class _RoutesViewState extends State<RoutesView> {
     setState(() {
       try {
         _center = LatLng(position.latitude, position.longitude);
-
         Markers._markers.add(Marker(
             markerId: MarkerId('currentLocation'),
             draggable: false,

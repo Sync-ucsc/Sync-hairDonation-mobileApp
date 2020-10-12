@@ -80,6 +80,7 @@ class Target {
     this.lat,
     this.lng,
     this.noOfWigs,
+    this.image,
   });
 
   String status;
@@ -90,6 +91,7 @@ class Target {
   double lat;
   double lng;
   int noOfWigs;
+  String image;
 
   factory Target.fromJson(Map<String, dynamic> json) => Target(
         status: json["status"],
@@ -100,6 +102,7 @@ class Target {
         lat: json["lat"].toDouble(),
         lng: json["lng"].toDouble(),
         noOfWigs: json["noOfWigs"],
+        image: json["image"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -111,5 +114,6 @@ class Target {
         "lat": lat,
         "lng": lng,
         "noOfWigs": noOfWigs,
+        "image": image
       };
 }

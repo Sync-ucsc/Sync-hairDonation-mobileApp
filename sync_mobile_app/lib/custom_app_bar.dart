@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:sync_mobile_app/models/notification_model.dart';
+import 'package:sync_mobile_app/models/target_model.dart';
 import 'package:sync_mobile_app/screens/change_password.dart';
 import 'package:sync_mobile_app/screens/dashboard.dart';
 import 'package:sync_mobile_app/screens/routes_view.dart';
@@ -21,12 +23,18 @@ class _CustomAppBarState extends State<CustomAppBar> {
   final TextEditingController _oldPass = TextEditingController();
   final TextEditingController _pass = TextEditingController();
   final TextEditingController _confirmPass = TextEditingController();
+  List<Notifications> notifications = [];
   bool _autoValidate = false;
   String _password;
   String _oldPassword;
   String _confirmPassword;
   String _newPassword;
   String _submitOldPass;
+
+  _CustomAppBarState() {
+    getNotifications();
+  }
+
   @override
   Widget build(BuildContext context) {
     final _height = MediaQuery.of(context).size.height;
@@ -54,7 +62,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                         ),
                         SizedBox(width: _width * 0.04),
                         Container(
-                          width: _width * 0.43,
+                          width: _width * 0.35,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
@@ -63,7 +71,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                                       " " +
                                       UserDetails.lastName,
                                   style: TextStyle(
-                                      fontSize: _height * 0.03,
+                                      fontSize: _height * 0.025,
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold)),
                               Text(UserDetails.currentUserEmail,
@@ -75,11 +83,17 @@ class _CustomAppBarState extends State<CustomAppBar> {
                           ),
                         ),
                         IconButton(
+                          icon: Icon(Icons.notifications),
+                          color: Colors.white,
+                          onPressed: _showDialog2,
+                        ),
+                        SizedBox(width: _width * 0.01),
+                        IconButton(
                           icon: Icon(Icons.settings),
                           color: Colors.white,
                           onPressed: _showDialog,
                         ),
-                        SizedBox(width: _width * 0.03),
+                        SizedBox(width: _width * 0.01),
                         IconButton(
                           icon: Icon(Icons.power_settings_new),
                           color: Colors.white,
@@ -278,6 +292,63 @@ class _CustomAppBarState extends State<CustomAppBar> {
                       ]),
                 ),
               );
+            })));
+  }
+
+  calculateDiff(date) {
+    final validDate = DateTime(date);
+    final currentDate = DateTime.now();
+    return currentDate.difference(validDate).inDays;
+  }
+
+  getNotifications() async {
+    final res = await HttpService().getNotifications();
+    res.data.forEach((e) {
+      if ((e.role == 'all' || e.role == 'driver') &&
+          e.notificationStatus != '2' &&
+          this.calculateDiff(e.validDate) >= 0) {
+        setState(() {
+          notifications.add(e);
+        });
+      }
+      print("kkkkkkkkkkkkkkkk" + notifications[0].massage);
+    });
+  }
+
+  void _showDialog2() async {
+    showDialog(
+        context: context,
+        builder: (_) => new AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10.0))),
+            content: Builder(builder: (context) {
+              var height = MediaQuery.of(context).size.height;
+              var width = MediaQuery.of(context).size.width;
+
+              return SingleChildScrollView(
+                  child: Container(
+                height: height - 100,
+                width: width - 100,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      "Notifications",
+                      style: TextStyle(color: Color(0xFF9F0784), fontSize: 25),
+                    ),
+                    SizedBox(height: height * 0.04),
+                    ListView.separated(
+                      separatorBuilder: (BuildContext context, int index) =>
+                          const Divider(),
+                      scrollDirection: Axis.vertical,
+                      itemCount: notifications.length,
+                      itemBuilder: (context, index) {
+                        return Card(child: Text(notifications[index].massage));
+                      },
+                    )
+                  ],
+                ),
+              ));
             })));
   }
 

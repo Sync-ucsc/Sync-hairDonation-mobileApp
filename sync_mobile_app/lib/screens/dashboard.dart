@@ -6,6 +6,7 @@ import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
 import 'package:flutter_rounded_progress_bar/rounded_progress_bar_style.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:sync_mobile_app/http_service.dart';
+import 'package:sync_mobile_app/models/target_model.dart';
 import 'package:sync_mobile_app/screens/routes_view.dart';
 import 'package:sync_mobile_app/screens/target_page.dart';
 import 'package:sync_mobile_app/screens/flutter_rounded_progress_bar.dart';
@@ -21,6 +22,7 @@ class DashBoard extends StatefulWidget {
 class _DashBoardState extends State<DashBoard> {
   double percent;
   Position currentLocation;
+
   @override
   void initState() {
     Timer.periodic(Duration(minutes: 2), (timer) {
@@ -51,12 +53,14 @@ class _DashBoardState extends State<DashBoard> {
       UserTarget.salons = [];
     });
     final res = await HttpService().getTarget();
+    UserTarget.salons = [];
     for (var i = 0; i < res.data[0].targets.length; i++) {
       setState(() {
         UserTarget.completed = 0;
         UserTarget.salons.add(res.data[0].targets[i]);
       });
     }
+
     UserTarget.salons.forEach((element) {
       if (element.status == "Delivered") {
         setState(() {
@@ -262,39 +266,50 @@ class _DashBoardState extends State<DashBoard> {
                             ),
                           ),
                           SizedBox(height: 5),
-                          // GridView.builder(
-                          //     itemCount: 6,
-                          //     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          //         crossAxisCount: 3, childAspectRatio: 8.0 / 10.0),
-                          //     itemBuilder: (BuildContext context, int index) {
-                          //       return Padding(
-                          //         padding: EdgeInsets.all(5),
-                          //         child: Card(
+                          UserTarget.salons.length != null
+                              ? Row(
+                                  children: UserTarget.salons
+                                      .map((salon) => Container(
+                                            decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                  image:
+                                                      NetworkImage(salon.image),
+                                                  fit: BoxFit.fill),
+                                              shape: BoxShape.rectangle,
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      _height * 0.02),
+                                            ),
+                                            margin: EdgeInsets.all(10),
+                                            height: 97,
+                                            width: 80,
+                                          ))
+                                      .toList(),
+                                )
+                              : Container(
+                                  child: Text("Loading"),
+                                ),
+                          // Expanded(
+                          //   child: ListView.separated(
+                          //       separatorBuilder:
+                          //           (BuildContext context, int index) =>
+                          //               const Divider(),
+                          //       itemCount: 3,
+                          //       padding: const EdgeInsets.all(2),
+                          //       scrollDirection: Axis.horizontal,
+                          //       itemBuilder: (BuildContext context, int index) {
+                          //         return Container(height: 4, width: 4, color: Colors.red,);
+                          //         return Card(
                           //           shape: RoundedRectangleBorder(
-                          //               borderRadius: BorderRadius.circular(10)),
-                          //           clipBehavior: Clip.antiAlias,
-                          //           child: Column(
-                          //             children: <Widget>[
-                          //               Expanded(
-                          //                   child: Container(
-                          //                 decoration: BoxDecoration(
-                          //                   image: DecorationImage(
-                          //                       image:
-                          //                           AssetImage("images/Himash.jpg"),
-                          //                       fit: BoxFit.fill),
-                          //                 ),
-                          //               )),
-                          //               Padding(
-                          //                   padding: EdgeInsets.all(10.0),
-                          //                   child: Text(
-                          //                     "Name",
-                          //                     style: TextStyle(fontSize: 18.0),
-                          //                   )),
-                          //             ],
-                          //           ),
-                          //         ),
-                          //       );
-                          //     })
+                          //               borderRadius: BorderRadius.circular(
+                          //                   _height * 0.04),
+                          //               side: BorderSide(
+                          //                   color: Color(0xFF9F0784),
+                          //                   width: _width * 0.001)),
+                          //           color: Colors.white,
+                          //         );
+                          //       }),
+                          // )
                         ],
                       )),
                 )
