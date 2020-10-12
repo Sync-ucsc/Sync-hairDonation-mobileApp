@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:sync_mobile_app/models/notification_model.dart';
+
 import 'models/user_model.dart';
 import 'models/target_model.dart';
 import 'package:http/http.dart' as http;
@@ -112,5 +114,16 @@ class HttpService {
 
     print(response.body);
     return responseModelFromJson(response.body);
+  }
+
+  Future<NotificationModel> getNotifications() async {
+    final String apiUrl = "http://10.0.2.2:3000/notification/all";
+
+    Map<String, String> headers = {
+      "Content-type": "application/json",
+      'authorization': 'Basic c3R1ZHlkb3RlOnN0dWR5ZG90ZTEyMw=='
+    };
+    final json = await http.get(apiUrl);
+    return NotificationModel.fromJson(jsonDecode(json.body));
   }
 }
