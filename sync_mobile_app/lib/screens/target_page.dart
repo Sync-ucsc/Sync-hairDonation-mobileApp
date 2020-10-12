@@ -42,6 +42,7 @@ class _TargetPageState extends State<TargetPage> {
   _locateMe() async {
     currentLocation = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+
     setState(() {
       currentLocation = currentLocation;
     });
